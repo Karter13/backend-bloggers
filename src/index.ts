@@ -74,8 +74,15 @@ app.get(`${APIBloggers}`, (req: Request, res: Response) => {
 app.post(`${APIBloggers}`, (req: Request, res: Response) => {
     let isValid = true
     const errorsMessages: IErrorMessage[] = []
-    const name = req.body.name.trim()
-    const youtubeUrl = req.body.youtubeUrl.trim()
+    const name = req.body?.name?.trim()
+    const youtubeUrl = req.body?.youtubeUrl?.trim()
+    const body = req.body
+
+    if (!body || body.length === 0) {
+        isValid = false
+        errorsMessages.push(createErrorsMessage(`name`, `Field is empty or has more than 15 characters`))
+        errorsMessages.push(createErrorsMessage(`youtubeUrl`, `Field does not match regular expression ${URLValidator} or has more than 100 characters.`))
+    }
 
     if (!name || name.length > 15) {
         isValid = false
