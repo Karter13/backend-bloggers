@@ -134,8 +134,8 @@ app.put(`${APIBloggers}/:bloggerId`, (req: Request, res: Response) => {
         errorsMessages.push(createErrorsMessage(`name`, `Field is empty or has more than 15 characters`))
     }
 
-    const name = (req.body.name).trim()
-    const youtubeUrl = req.body.youtubeUrl
+    const name = req.body?.name?.trim()
+    const youtubeUrl = req.body?.youtubeUrl?.trim()
     const id = +req.params.bloggerId
     const blogger = bloggers.find(b => b.id === id)
 
