@@ -190,10 +190,17 @@ app.get(`${APIPosts}`, (req: Request, res: Response) => {
 app.post(`${APIPosts}`, (req: Request, res: Response) => {
     let isValid = true
     const errorsMessages: IErrorMessage[] = []
+    const body = req.body
 
-    const title = req.body.title.trim()
-    const shortDescription = req.body.shortDescription.trim()
-    const content = req.body.content.trim()
+    if (!body || body.length === 0) {
+        isValid = false
+        errorsMessages.push(createErrorsMessage(`shortDescription`, `Error while filling or has more than 100 characters.`))
+        errorsMessages.push(createErrorsMessage(`title`, `Error while filling or has more than 30 characters.`))
+    }
+
+    const title = req.body?.title?.trim()
+    const shortDescription = req.body?.shortDescription?.trim()
+    const content = req.body?.content?.trim()
     const bloggerId = +req.body.bloggerId
 
     const blogger = bloggers.find(b => b.id === bloggerId)
