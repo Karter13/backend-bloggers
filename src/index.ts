@@ -75,14 +75,14 @@ app.post(`${APIBloggers}`, (req: Request, res: Response) => {
     let isValid = true
     const errorsMessages: IErrorMessage[] = []
     const body = req.body
-
     if (!body || body.length === 0) {
         isValid = false
         errorsMessages.push(createErrorsMessage(`youtubeUrl`, `Field does not match regular expression ${URLValidator} or has more than 100 characters.`))
         errorsMessages.push(createErrorsMessage(`name`, `Field is empty or has more than 15 characters`))
     }
-    const name = req.body?.name?.trim()
-    const youtubeUrl = req.body?.youtubeUrl?.trim()
+
+    const name = body?.name?.trim()
+    const youtubeUrl = body?.youtubeUrl?.trim()
 
     if (!name || name.length > 15) {
         isValid = false
@@ -127,22 +127,20 @@ app.put(`${APIBloggers}/:bloggerId`, (req: Request, res: Response) => {
     let isValid = true;
     const errorsMessages: IErrorMessage[] = [];
     const body = req.body;
-
     if (!body || body.length === 0) {
         isValid = false
         errorsMessages.push(createErrorsMessage(`youtubeUrl`, `Field does not match regular expression ${URLValidator} or has more than 100 characters.`))
         errorsMessages.push(createErrorsMessage(`name`, `Field is empty or has more than 15 characters`))
     }
 
-    const name = req.body?.name?.trim()
-    const youtubeUrl = req.body?.youtubeUrl?.trim()
+    const name = body?.name?.trim()
+    const youtubeUrl = body?.youtubeUrl?.trim()
     const id = +req.params.bloggerId
     const blogger = bloggers.find(b => b.id === id)
 
     if (!blogger) {
         res.send(404)
     }
-
     if (!name || name.length > 15) {
         isValid = false
         errorsMessages.push(createErrorsMessage(`name`, `Field is empty or has more than 15 characters`))
@@ -151,6 +149,7 @@ app.put(`${APIBloggers}/:bloggerId`, (req: Request, res: Response) => {
         isValid = false
         errorsMessages.push(createErrorsMessage(`youtubeUrl`, `Field does not match regular expression ${URLValidator} or has more than 100 characters.`))
     }
+
     if (isValid && blogger) {
         blogger.name = name
         blogger.youtubeUrl = youtubeUrl
@@ -163,7 +162,6 @@ app.put(`${APIBloggers}/:bloggerId`, (req: Request, res: Response) => {
             }
         )
     }
-
 
 })
 //Delete Blogger by id
@@ -191,7 +189,6 @@ app.post(`${APIPosts}`, (req: Request, res: Response) => {
     let isValid = true
     const errorsMessages: IErrorMessage[] = []
     const body = req.body
-
     if (!body || body.length === 0) {
         isValid = false
         errorsMessages.push(createErrorsMessage(`shortDescription`, `Error while filling or has more than 100 characters.`))
@@ -199,9 +196,9 @@ app.post(`${APIPosts}`, (req: Request, res: Response) => {
     }
 
     const title = req.body?.title?.trim()
-    const shortDescription = req.body?.shortDescription?.trim()
-    const content = req.body?.content?.trim()
-    const bloggerId = +req.body.bloggerId
+    const shortDescription = body?.shortDescription?.trim()
+    const content = body?.content?.trim()
+    const bloggerId = +body.bloggerId
 
     const blogger = bloggers.find(b => b.id === bloggerId)
 
@@ -241,8 +238,6 @@ app.post(`${APIPosts}`, (req: Request, res: Response) => {
             }
         )
     }
-
-
 })
 //Get post by id
 app.get(`${APIPosts}/:postId`, (req: Request, res: Response) => {
@@ -262,7 +257,6 @@ app.put(`${APIPosts}/:postId`, (req: Request, res: Response) => {
     let isValid = true
     const errorsMessages: IErrorMessage[] = []
     const body = req.body
-
     if (!body || body.length === 0) {
         isValid = false
         errorsMessages.push(createErrorsMessage(`shortDescription`, `Error while filling or has more than 100 characters.`))
@@ -270,10 +264,10 @@ app.put(`${APIPosts}/:postId`, (req: Request, res: Response) => {
     }
 
     const postId = +req.params.postId
-    const bloggerId = +req.body.bloggerId;
-    const title = req.body?.title?.trim();
-    const shortDescription = req.body?.shortDescription?.trim();
-    const content = req.body?.content?.trim();
+    const bloggerId = +body.bloggerId;
+    const title = body?.title?.trim();
+    const shortDescription = body?.shortDescription?.trim();
+    const content = body?.content?.trim();
 
     let post = posts.find(p => p.id === postId);
 
@@ -311,8 +305,6 @@ app.put(`${APIPosts}/:postId`, (req: Request, res: Response) => {
             }
         )
     }
-
-
 })
 //Delete post by id
 app.delete(`${APIPosts}/:postId`, (req: Request, res: Response) => {
