@@ -106,7 +106,7 @@ app.post(`${APIBloggers}`, (req: Request, res: Response) => {
         res.status(400).send(
             {
                 errorsMessages,
-                resultCode: 2
+                resultCode: 1
             }
         )
     }
@@ -152,7 +152,7 @@ app.put(`${APIBloggers}/:bloggerId`, (req: Request<{ bloggerId: string },
         res.status(400).send(
             {
                 errorsMessages,
-                resultCode: 2
+                resultCode: 1
             }
         )
     }
@@ -223,7 +223,7 @@ app.post(`${APIPosts}`, (req: Request, res: Response) => {
         res.status(400).send(
             {
                 errorsMessages,
-                resultCode: 2
+                resultCode: 1
             }
         )
     }
@@ -286,7 +286,7 @@ app.put(`${APIPosts}/:postId`, (req: Request, res: Response) => {
         res.status(400).send(
             {
                 errorsMessages,
-                resultCode: 2
+                resultCode: 1
             }
         )
     }
