@@ -65,7 +65,6 @@ let posts: Array<IPost> = [
 const createErrorsMessage = (field: string, message: string): IErrorMessage => {
     return {message, field}
 }
-
 //Get all bloggers
 app.get(`${APIBloggers}`, (req: Request, res: Response) => {
     res.send(bloggers)
