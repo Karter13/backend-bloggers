@@ -8,7 +8,6 @@ export interface IPost {
     bloggerId: IBlogger["id"]
     bloggerName?: IBlogger["name"]
 }
-
 export let posts: Array<IPost> = [
     {
         id: 1,

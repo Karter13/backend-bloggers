@@ -1,6 +1,6 @@
 export interface IBlogger {
     id: number
-    name: string
+    name?: string | null
     youtubeUrl: string
 }
 
