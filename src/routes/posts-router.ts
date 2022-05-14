@@ -1,5 +1,6 @@
 import express, {Router, Request, Response} from "express"
 import {} from "..";
+import { checkHeadersMiddleware } from "../middlewares/auth-middleware";
 import {
     IErrorMessage,
     inputValidatorMiddleware,
@@ -18,6 +19,7 @@ postsRouter.get(`/`, (req: Request, res: Response) => {
 //Create new post
 postsRouter.post(`/`,
     postValidationRules,
+    checkHeadersMiddleware,
     inputValidatorMiddleware,
     (req: Request, res: Response) => {
         const title = req.body?.title?.trim()
@@ -44,6 +46,7 @@ postsRouter.get(`/:postId`, (req: Request, res: Response) => {
 //Update existing post by id with InputModel
 postsRouter.put(`/:postId`,
     postValidationRules,
+    checkHeadersMiddleware,
     inputValidatorMiddleware,
     (req: Request, res: Response) => {
 
@@ -63,7 +66,9 @@ postsRouter.put(`/:postId`,
     res.send(204);
 })
 //Delete post by id
-postsRouter.delete(`/:postId`, (req: Request, res: Response) => {
+postsRouter.delete(`/:postId`,
+    checkHeadersMiddleware,
+    (req: Request, res: Response) => {
     const id = +req.params.postId
     const isDeleted = postsRepository.deletePostById(id)
     if (isDeleted) {

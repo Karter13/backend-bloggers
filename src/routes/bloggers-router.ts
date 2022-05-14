@@ -1,5 +1,6 @@
 import express, {Router, Request, Response} from "express"
 import {} from "..";
+import { checkHeadersMiddleware } from "../middlewares/auth-middleware";
 import {
     bloggerValidationRules,
     IErrorMessage,
@@ -17,6 +18,7 @@ bloggersRouter.get(`/`, (req: Request, res: Response) => {
 //Create new blogger
 bloggersRouter.post(`/`,
     bloggerValidationRules,
+    checkHeadersMiddleware,
     inputValidatorMiddleware,
     (req: Request, res: Response) => {
         const name = req.body.name
@@ -40,6 +42,7 @@ bloggersRouter.get(`/:bloggerId`, (req: Request, res: Response) => {
 //Update existing Blogger by id with InputModel
 bloggersRouter.put(`/:bloggerId`,
     bloggerValidationRules,
+    checkHeadersMiddleware,
     inputValidatorMiddleware,
     (req: Request, res: Response) => {
         const id = +req.params.bloggerId
@@ -53,7 +56,9 @@ bloggersRouter.put(`/:bloggerId`,
         res.send(204)
     })
 //Delete Blogger by id
-bloggersRouter.delete(`/:bloggerId`, (req: Request, res: Response) => {
+bloggersRouter.delete(`/:bloggerId`,
+    checkHeadersMiddleware,
+    (req: Request, res: Response) => {
     const id = +req.params.bloggerId
     const isDeleted = bloggersRepository.deleteBlogger(id)
 
