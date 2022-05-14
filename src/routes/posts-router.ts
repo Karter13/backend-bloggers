@@ -18,8 +18,8 @@ postsRouter.get(`/`, (req: Request, res: Response) => {
 })
 //Create new post
 postsRouter.post(`/`,
-    postValidationRules,
     checkHeadersMiddleware,
+    postValidationRules,
     inputValidatorMiddleware,
     (req: Request, res: Response) => {
         const title = req.body?.title?.trim()
@@ -45,8 +45,8 @@ postsRouter.get(`/:postId`, (req: Request, res: Response) => {
 })
 //Update existing post by id with InputModel
 postsRouter.put(`/:postId`,
-    postValidationRules,
     checkHeadersMiddleware,
+    postValidationRules,
     inputValidatorMiddleware,
     (req: Request, res: Response) => {
 
