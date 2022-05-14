@@ -17,8 +17,8 @@ bloggersRouter.get(`/`, (req: Request, res: Response) => {
 })
 //Create new blogger
 bloggersRouter.post(`/`,
-    bloggerValidationRules,
     checkHeadersMiddleware,
+    bloggerValidationRules,
     inputValidatorMiddleware,
     (req: Request, res: Response) => {
         const name = req.body.name
@@ -41,8 +41,8 @@ bloggersRouter.get(`/:bloggerId`, (req: Request, res: Response) => {
 })
 //Update existing Blogger by id with InputModel
 bloggersRouter.put(`/:bloggerId`,
-    bloggerValidationRules,
     checkHeadersMiddleware,
+    bloggerValidationRules,
     inputValidatorMiddleware,
     (req: Request, res: Response) => {
         const id = +req.params.bloggerId
