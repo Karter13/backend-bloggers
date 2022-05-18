@@ -1,13 +1,12 @@
 import {Request, Response, NextFunction} from "express";
 import {body, validationResult} from "express-validator";
-import { bloggersRepository } from "../repositories/bloggers-repository";
-import { postsRepository } from "../repositories/posts-repository";
+import {bloggersRepository} from "../repositories/bloggers-repository";
+import {postsRepository} from "../repositories/posts-repository";
 
 export interface IErrorMessage {
     message: string
     field: string
 }
-
 
 export const urlValidator = /^https:\/\/([a-zA-Z0-9_-]+\.)+[a-zA-Z0-9_-]+$/;
 
@@ -16,25 +15,30 @@ export const bloggerValidationRules = [
     body('name').exists({checkFalsy: true}).isString().trim().not()
         .isEmpty().withMessage(`Field is empty.`)
         .isLength({min: 3, max: 15}).withMessage(`Field has more than 15 characters`),
-    body('youtubeUrl').matches(urlValidator).withMessage(`Field does not match regular expression ${urlValidator} `)
+    body('youtubeUrl').matches(urlValidator).withMessage(`Field does not match regular expression ${urlValidator}`)
         .isString().isLength({max: 100}).withMessage(`Field has more than 100 characters.`)
 ]
 
 export const postValidationRules = [
-    body('title').exists({checkFalsy: true}).isString().trim().not().isEmpty().withMessage(`Field is empty.`).isLength({min: 1, max: 30}).withMessage(`Field has more than 30 characters`),
-    body('shortDescription').exists({checkFalsy: true}).isString().trim().not().isEmpty().withMessage(`Field is empty.`).isLength({min: 1, max: 100}).withMessage(`Field has more than 100 characters`),
-    body('content').exists({checkFalsy: true}).isString().trim().not().isEmpty().withMessage(`Field is empty.`).isLength({min: 1, max: 1000}).withMessage(`Field has more than 1000 characters`),
-    body('bloggerId').exists({checkFalsy: true}).isInt().withMessage(`It isn't integer.`).trim().not().isEmpty().withMessage(`Field is empty.`).custom((val, {req}) => {
-        const blogger = bloggersRepository.getBloggerById(+val)
-        const post = postsRepository.getPostById(+req.params?.postId);
-        if (!blogger) {
-            throw new Error('BloggerId is incorrect, there is no blogger with such ID');
-        }
-        // if (post?.bloggerId !== +val)  {
-        //     throw new Error('BloggerId is incorrect, there is no post with such ID');
-        // }
-        return true;
-    })
+    body('title').exists({checkFalsy: true}).isString().trim().not().isEmpty().withMessage(`Field is empty.`)
+        .isLength({min: 1, max: 30}).withMessage(`Field has more than 30 characters`),
+    body('shortDescription').exists({checkFalsy: true}).isString().trim().not().isEmpty().withMessage(`Field is empty.`)
+        .isLength({min: 1, max: 100}).withMessage(`Field has more than 100 characters`),
+    body('content').exists({checkFalsy: true}).isString().trim().not().isEmpty().withMessage(`Field is empty.`)
+        .isLength({min: 1, max: 1000}).withMessage(`Field has more than 1000 characters`),
+    body('bloggerId').exists({checkFalsy: true}).isInt().withMessage(`It isn't integer.`)
+        .trim().not().isEmpty().withMessage(`Field is empty.`)
+        .custom((val, {req}) => {
+            const blogger = bloggersRepository.getBloggerById(+val)
+            const post = postsRepository.getPostById(+req.params?.postId);
+            if (!blogger) {
+                throw new Error('BloggerId is incorrect, there is no blogger with such ID');
+            }
+            // if (post?.bloggerId !== +val)  {
+            //     throw new Error('BloggerId is incorrect, there is no post with such ID');
+            // }
+            return true;
+        })
 ]
 
 export const inputValidatorMiddleware = (req: Request, res: Response, next: NextFunction) => {

@@ -9,13 +9,12 @@ export let bloggers: Array<IBlogger> = [
     {id: 2, name: 'Diman', youtubeUrl: 'https://it-comasutra.com'},
     {id: 3, name: 'Anna', youtubeUrl: 'https://it-comasutra.com'}
 ];
-export const URLValidator = /^https:\/\/([a-zA-Z0-9_-]+\.)+[a-zA-Z0-9_-]+$/;
 
 export const bloggersRepository = {
-    getBloggers() {
+    async getBloggers() {
         return bloggers;
     },
-    createNewBlogger(name: string, youtubeUrl: string): IBlogger {
+    async createNewBlogger(name: string, youtubeUrl: string): Promise<IBlogger> {
         const newBlogger = {
             id: +(Date.now()),
             name,
@@ -24,10 +23,10 @@ export const bloggersRepository = {
         bloggers.push(newBlogger);
         return newBlogger;
     },
-    getBloggerById(id: number) {
+    async getBloggerById(id: number) {
         return bloggers.find(b => b.id === id)
     },
-    updateBloggerById(id: number, name: string, youtubeUrl: string) {
+    async updateBloggerById(id: number, name: string, youtubeUrl: string) {
         const blogger = bloggers.find(b => b.id === id);
         if(blogger) {
             blogger.name = name;
@@ -38,7 +37,7 @@ export const bloggersRepository = {
         }
         
     },
-    deleteBlogger(id: number) {
+    async deleteBlogger(id: number) {
         const blogger = bloggers.find(b => b.id === id)
         const newBloggers = bloggers.filter(b => b.id !== id)
         if(bloggers.length !== 0 && newBloggers.length < bloggers.length) {

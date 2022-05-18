@@ -4,6 +4,7 @@ import { bloggersRouter } from './routes/bloggers-router'
 import { postsRouter } from './routes/posts-router'
 import { checkHeadersMiddleware } from './middlewares/auth-middleware'
 import { IErrorMessage } from './middlewares/input-validator-middleware'
+import { runDb } from './repositories/db'
 
 const app = express()
 const port = process.env.PORT || 5000
@@ -19,6 +20,11 @@ app.use('/api/posts', postsRouter)
 app.get('/', (req: Request, res: Response) => {
     res.send('Test Request for BACKEND-BLOGGERS!')
 })
-app.listen(port, () => {
-    console.log(`Example app listening on port ${port}`)
-})
+
+const startApp = async () => {
+  await runDb()
+    app.listen(port, () => {
+        console.log(`Example app listening on port ${port}`)
+    })
+}
+startApp();

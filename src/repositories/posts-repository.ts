@@ -8,6 +8,7 @@ export interface IPost {
     bloggerId: IBlogger["id"]
     bloggerName?: IBlogger["name"]
 }
+
 export let posts: Array<IPost> = [
     {
         id: 1,
@@ -36,10 +37,10 @@ export let posts: Array<IPost> = [
 ];
 
 export const postsRepository = {
-    getPosts() {
+    async getPosts() {
         return posts
     },
-    createNewPost(title: string, shortDescription: string, content: string, bloggerId: number) {
+    async createNewPost(title: string, shortDescription: string, content: string, bloggerId: number) {
         const blogger = bloggers.find(b => b.id === bloggerId);
         const newPost = {
             id: +Date.now(),
@@ -52,13 +53,13 @@ export const postsRepository = {
         posts.push(newPost);
         return newPost;
     },
-    getPostById(id: number) {
+    async getPostById(id: number) {
         const post = posts.find(p => p.id === id);
         return post;
     },
-    updatePostById(postId: number, title: string, shortDescription: string, content: string) {
+    async updatePostById(postId: number, title: string, shortDescription: string, content: string) {
         let post = posts.find(p => p.id === postId);
-        if(post) {
+        if (post) {
             post.title = title;
             post.shortDescription = shortDescription;
             post.content = content;
@@ -66,9 +67,9 @@ export const postsRepository = {
         } else {
             return false
         }
-        
+
     },
-    deletePostById(id: number) {
+    async deletePostById( id: number) {
         const newPosts = posts.filter(p => p.id !== id)
         if (newPosts.length < posts.length) {
             posts = newPosts
