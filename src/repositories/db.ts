@@ -1,11 +1,12 @@
 import {MongoClient} from 'mongodb'
-import { IBlogger } from './bloggers-db-repository';
+import { IBlogger } from '../domain/bloggers-service';
 
 const mongoUri = process.env.mongoURI || "mongodb://0.0.0.0:27017";
 
 const mongoDBClient = new MongoClient(mongoUri);
 
 export const bloggersCollection = mongoDBClient.db("bloggersDB").collection<IBlogger>("bloggers");
+export const postsCollection = mongoDBClient.db("bloggersDB").collection<IBlogger>("posts");
 
 export async function runDb() {
     try {

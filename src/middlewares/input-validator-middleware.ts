@@ -10,7 +10,6 @@ export interface IErrorMessage {
 
 export const urlValidator = /^https:\/\/([a-zA-Z0-9_-]+\.)+[a-zA-Z0-9_-]+$/;
 
-
 export const bloggerValidationRules = [
     body('name').exists({checkFalsy: true}).isString().trim().not()
         .isEmpty().withMessage(`Field is empty.`)

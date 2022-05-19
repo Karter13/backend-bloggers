@@ -3,10 +3,9 @@ import { bloggersCollection } from "./db";
 
 export const bloggersRepository = {
     async getBloggers() {
-        return bloggersCollection.find().toArray();
+        return await bloggersCollection.find().toArray();
     },
     async createNewBlogger(newBlogger: IBlogger): Promise<IBlogger> {
-
         const result = await bloggersCollection.insertOne(newBlogger);
         return newBlogger;
     },

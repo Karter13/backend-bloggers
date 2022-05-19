@@ -7,13 +7,14 @@ import {
     postValidationRules
 } from "../middlewares/input-validator-middleware";
 import {bloggers, bloggersRepository} from "../repositories/bloggers-repository";
-import {postsRepository} from "../repositories/posts-repository";
+import { postsService } from "../domain/posts-service";
+
 
 export const postsRouter = Router({});
 
 //Get all posts
 postsRouter.get(`/`, async (req: Request, res: Response) => {
-    const posts = await postsRepository.getPosts()
+    const posts = await postsService.getPosts()
     res.send(posts)
 })
 //Create new post
@@ -27,13 +28,13 @@ postsRouter.post(`/`,
         const content = req.body?.content?.trim()
         const bloggerId = +req.body.bloggerId
 
-        const newPost = await postsRepository.createNewPost(title, shortDescription, content, bloggerId)
+        const newPost = await postsService.createNewPost(title, shortDescription, content, bloggerId)
         res.status(201).send(newPost)
     })
 //Get post by id
 postsRouter.get(`/:postId`, async (req: Request, res: Response) => {
     const id = +req.params.postId;
-    const post = await postsRepository.getPostById(id);
+    const post = await postsService.getPostById(id);
     if (id <= 0) {
         res.send(400);
     }
@@ -56,8 +57,8 @@ postsRouter.put(`/:postId`,
         const content = req.body?.content?.trim();
         const bloggerId = +req.body.bloggerId;
 
-        const post = postsRepository.getPostById(postId);//?????????????????
-        const isPost = await postsRepository.updatePostById(postId, title, shortDescription, content)
+        const post = postsService.getPostById(postId);//?????????????????
+        const isPost = await postsService.updatePostById(postId, title, shortDescription, content)
 
         if (!isPost) {
             res.sendStatus(404);
@@ -70,7 +71,7 @@ postsRouter.delete(`/:postId`,
     checkHeadersMiddleware,
     async (req: Request, res: Response) => {
         const id = +req.params.postId
-        const isDeleted = await postsRepository.deletePostById(id)
+        const isDeleted = await postsService.deletePostById(id)
         if (isDeleted) {
             res.send(204)
         } else {
