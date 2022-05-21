@@ -1,7 +1,7 @@
 import {Request, Response, NextFunction} from "express";
-import {body, validationResult} from "express-validator";
-import {bloggersRepository} from "../repositories/bloggers-repository";
-import {postsRepository} from "../repositories/posts-repository";
+import {body, validationResult, param} from "express-validator";
+import {bloggersRepository} from "../repositories/bloggers-db-repository";
+import {postsRepository} from "../repositories/posts-db-repository";
 
 export interface IErrorMessage {
     message: string
@@ -27,9 +27,9 @@ export const postValidationRules = [
         .isLength({min: 1, max: 1000}).withMessage(`Field has more than 1000 characters`),
     body('bloggerId').exists({checkFalsy: true}).isInt().withMessage(`It isn't integer.`)
         .trim().not().isEmpty().withMessage(`Field is empty.`)
-        .custom((val, {req}) => {
-            const blogger = bloggersRepository.getBloggerById(+val)
-            const post = postsRepository.getPostById(+req.params?.postId);
+        .custom(async (val, {req}) => {
+            const blogger = await bloggersRepository.getBloggerById(+val)
+            const post = await postsRepository.getPostById(+req.params?.postId);
             if (!blogger) {
                 throw new Error('BloggerId is incorrect, there is no blogger with such ID');
             }
@@ -38,6 +38,15 @@ export const postValidationRules = [
             // }
             return true;
         })
+]
+
+export const postValidationForSpecificBloggerRules = [
+    body('title').exists({checkFalsy: true}).isString().trim().not().isEmpty().withMessage(`Field is empty.`)
+        .isLength({min: 1, max: 30}).withMessage(`Field has more than 30 characters`),
+    body('shortDescription').exists({checkFalsy: true}).isString().trim().not().isEmpty().withMessage(`Field is empty.`)
+        .isLength({min: 1, max: 100}).withMessage(`Field has more than 100 characters`),
+    body('content').exists({checkFalsy: true}).isString().trim().not().isEmpty().withMessage(`Field is empty.`)
+        .isLength({min: 1, max: 1000}).withMessage(`Field has more than 1000 characters`)
 ]
 
 export const inputValidatorMiddleware = (req: Request, res: Response, next: NextFunction) => {

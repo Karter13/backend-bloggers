@@ -1,9 +1,28 @@
 import { IBlogger } from "../domain/bloggers-service";
-import { bloggersCollection } from "./db";
+import { DataWithPaginationType } from "../types/types";
+import { bloggersCollection, postsCollection } from "./db";
 
 export const bloggersRepository = {
-    async getBloggers() {
-        return await bloggersCollection.find().toArray();
+    async getBloggers(page: number, pageSize: number, searchNameTerm: string): Promise<DataWithPaginationType<IBlogger[]>> {
+        const filter: any = {};
+        if(searchNameTerm) {
+            filter.name = {$regex: searchNameTerm ? searchNameTerm : '' }
+        }
+        const totalCount = +(await bloggersCollection.countDocuments(filter));
+        const pagesCount = Math.ceil(totalCount / pageSize)
+        const allBloggers = await bloggersCollection
+            .find(filter)
+            .project<IBlogger>({_id: 0})
+            .skip((page-1) * pageSize)
+            .limit(pageSize)
+            .toArray()
+        return {
+            pagesCount,
+            page,
+            pageSize,
+            totalCount,
+            items: allBloggers
+        }
     },
     async createNewBlogger(newBlogger: IBlogger): Promise<IBlogger> {
         const result = await bloggersCollection.insertOne(newBlogger);
@@ -17,6 +36,10 @@ export const bloggersRepository = {
         const result = await bloggersCollection.updateOne(
             {id: id},
             {$set: {name, youtubeUrl}}
+        )
+        await postsCollection.updateMany(
+            {bloggerId: id},
+            {$set: {bloggerName: name}}
         )
         return result.matchedCount === 1
     },

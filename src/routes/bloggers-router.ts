@@ -1,19 +1,25 @@
 import express, {Router, Request, Response} from "express"
 import {} from "..";
-import { bloggersService } from "../domain/bloggers-service";
+import {bloggersService, IBlogger} from "../domain/bloggers-service";
+import {postsService} from "../domain/posts-service";
 import {checkHeadersMiddleware} from "../middlewares/auth-middleware";
 import {
     bloggerValidationRules,
     IErrorMessage,
-    inputValidatorMiddleware
+    inputValidatorMiddleware,
+    postValidationForSpecificBloggerRules,
+    postValidationRules
 } from "../middlewares/input-validator-middleware";
+import {DataWithPaginationType} from "../types/types";
+import {getPaginationData} from "./utils/paginationData";
 
 export const bloggersRouter = Router({})
 
 //Get all bloggers
 bloggersRouter.get(`/`, async (req: Request, res: Response) => {
-    const bloggers = await bloggersService.getBloggers()
-    res.send(bloggers)
+    const {page, pageSize, searchNameTerm} = getPaginationData(req.query)
+    const bloggersWithPaginationData: DataWithPaginationType<IBlogger[]> = await bloggersService.getBloggers(page, pageSize, searchNameTerm)
+    res.send(bloggersWithPaginationData)
 })
 //Create new blogger
 bloggersRouter.post(`/`,
@@ -62,7 +68,40 @@ bloggersRouter.delete(`/:bloggerId`,
 
         if (isDeleted) {
             res.sendStatus(204)
+            return
+        } else {
+            res.sendStatus(404)
+            return
+        }
+    })
+bloggersRouter.get('/:bloggerId/posts', async (req: Request, res: Response) => {
+    const {page, pageSize, searchNameTerm} = getPaginationData(req.query);
+    const bloggerId = req.params.bloggerId
+    const blogger = await bloggersService.getBloggerById(+bloggerId)
+    if (blogger) {
+        const allPostsBlogger = await postsService.getPosts(page, pageSize, searchNameTerm, bloggerId)
+        res.send(allPostsBlogger)
+    } else {
+        res.send(404)
+    }
+
+})
+bloggersRouter.post(`/:bloggerId/posts`,
+    checkHeadersMiddleware,
+    postValidationForSpecificBloggerRules,
+    inputValidatorMiddleware,
+    async (req: Request, res: Response) => {
+        const title = req.body?.title?.trim()
+        const shortDescription = req.body?.shortDescription?.trim()
+        const content = req.body?.content?.trim()
+        const bloggerId = +req.params.bloggerId
+        const blogger = await bloggersService.getBloggerById(bloggerId)
+        const newPost = await postsService.createNewPost(title, shortDescription, content, bloggerId)
+        if (blogger && newPost) {
+            res.status(201).send(newPost)
         } else {
             res.sendStatus(404)
         }
-    })
+
+    }
+)

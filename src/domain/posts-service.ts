@@ -1,5 +1,6 @@
 import {IBlogger} from "./bloggers-service";
 import {postsRepository} from "../repositories/posts-db-repository"
+import {bloggersRepository} from "../repositories/bloggers-db-repository"
 import {bloggersCollection} from "../repositories/db"
 
 export interface IPost {
@@ -12,12 +13,12 @@ export interface IPost {
 }
 
 export const postsService = {
-    async getPosts() {
-        return await postsRepository.getPosts()
+    async getPosts(page: number, pageSize: number, searchNameTerm: string, bloggerId: string | null) {
+        const postsWithPaginationData = await postsRepository.getPosts(page, pageSize, searchNameTerm, bloggerId)
+        return postsWithPaginationData
     },
     async createNewPost(title: string, shortDescription: string, content: string, bloggerId: number) {
-        //можем ли мы с бизнеса в базу лезть
-        const blogger = await bloggersCollection.findOne({id: bloggerId});
+        const blogger = await bloggersRepository.getBloggerById(bloggerId);
         const newPost: IPost = {
             id: +Date.now(),
             title,
@@ -26,7 +27,6 @@ export const postsService = {
             bloggerId,
             bloggerName: blogger?.name
         };
-        // @ts-ignore
         const result = await postsRepository.createNewPost(newPost)
         return newPost;
     },

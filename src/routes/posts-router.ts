@@ -7,15 +7,18 @@ import {
     postValidationRules
 } from "../middlewares/input-validator-middleware";
 import {bloggers, bloggersRepository} from "../repositories/bloggers-repository";
-import { postsService } from "../domain/posts-service";
+import {IPost, postsService } from "../domain/posts-service";
+import { getPaginationData } from "./utils/paginationData";
+import { DataWithPaginationType } from "../types/types";
 
 
 export const postsRouter = Router({});
 
 //Get all posts
 postsRouter.get(`/`, async (req: Request, res: Response) => {
-    const posts = await postsService.getPosts()
-    res.send(posts)
+    const{page, pageSize, searchNameTerm} = getPaginationData(req.query)
+    const postsWithPaginationData: DataWithPaginationType<IPost[]> = await postsService.getPosts(page, pageSize, searchNameTerm, null)
+    res.send(postsWithPaginationData)
 })
 //Create new post
 postsRouter.post(`/`,

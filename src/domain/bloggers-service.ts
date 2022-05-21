@@ -7,8 +7,9 @@ export interface IBlogger {
 }
 
 export const bloggersService = {
-    async getBloggers() {
-        return await bloggersRepository.getBloggers();
+    async getBloggers(page: number, pageSize: number, searchNameTerm: string) {
+        const bloggersWithPaginationData = await bloggersRepository.getBloggers(page, pageSize, searchNameTerm);
+        return bloggersWithPaginationData
     },
     async createNewBlogger(name: string, youtubeUrl: string): Promise<IBlogger> {
         const newBlogger = {
