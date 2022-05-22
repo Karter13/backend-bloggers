@@ -36,10 +36,6 @@ bloggersRouter.post(`/`,
 //Get blogger by id
 bloggersRouter.get(`/:bloggerId`, async (req: Request, res: Response) => {
     const bloggerId = +req.params.bloggerId
-    if(!bloggerId) {
-        res.sendStatus(404)
-        return
-    }
     const blogger = await bloggersService.getBloggerById(bloggerId)
     if (blogger) {
         res.send(blogger)
@@ -54,10 +50,6 @@ bloggersRouter.put(`/:bloggerId`,
     inputValidatorMiddleware,
     async (req: Request, res: Response) => {
         const bloggerId = +req.params.bloggerId
-        if(!bloggerId) {
-            res.sendStatus(404)
-            return
-        }
         const name = req.body?.name?.trim()
         const youtubeUrl = req.body?.youtubeUrl?.trim()
 
@@ -72,10 +64,6 @@ bloggersRouter.delete(`/:bloggerId`,
     checkHeadersMiddleware,
     async (req: Request, res: Response) => {
         const bloggerId = +req.params.bloggerId
-        if(!bloggerId) {
-            res.sendStatus(404)
-            return
-        }
         const isDeleted = await bloggersService.deleteBlogger(bloggerId)
         if (isDeleted) {
             res.sendStatus(204)
