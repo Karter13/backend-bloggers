@@ -28,7 +28,7 @@ postsRouter.post(`/`,
         const title = req.body?.title?.trim()
         const shortDescription = req.body?.shortDescription?.trim()
         const content = req.body?.content?.trim()
-        const bloggerId = +req.body.bloggerId
+        const bloggerId = req.body.bloggerId
 
         const newPost = await postsService.createNewPost(title, shortDescription, content, bloggerId)
         res.status(201).send(newPost)

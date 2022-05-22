@@ -8,8 +8,8 @@ export const postsRepository = {
             ? {title: {$regex: searchNameTerm ? searchNameTerm : ''}, bloggerId: +bloggerId}
             : {title: {$regex: searchNameTerm ? searchNameTerm : ''}}
 
-        const totalCount = await postsCollection.countDocuments(filter);
-        const pagesCount = Math.ceil(+totalCount / pageSize)
+        const totalCount = +(await postsCollection.countDocuments(filter));
+        const pagesCount = Math.ceil(totalCount / pageSize)
         const allPosts = await postsCollection
             .find(filter)
             .project<IPost>({_id: 0})
