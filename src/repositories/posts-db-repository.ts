@@ -5,7 +5,7 @@ import {postsCollection, bloggersCollection} from "./db"
 export const postsRepository = {
     async getPosts(page: number, pageSize: number, searchNameTerm: string, bloggerId: string | null) {
         const filter: any = bloggerId
-            ? {title: {$regex: searchNameTerm ? searchNameTerm : ''}, bloggerId: +bloggerId}
+            ? {title: {$regex: searchNameTerm ? searchNameTerm : ''}, bloggerId: bloggerId}
             : {title: {$regex: searchNameTerm ? searchNameTerm : ''}}
 
         const totalCount = await postsCollection.countDocuments(filter);
@@ -29,18 +29,18 @@ export const postsRepository = {
         const returnedPost = await postsCollection.findOne({id: newPost.id}, {projection: {_id:0}})
         return returnedPost;
     },
-    async getPostById(id: number) {
+    async getPostById(id: string) {
         const post = await postsCollection.findOne({id: id}, {projection: {_id: 0}})
         return post;
     },
-    async updatePostById(postId: number, title: string, shortDescription: string, content: string) {
+    async updatePostById(postId: string, title: string, shortDescription: string, content: string) {
         let result = await postsCollection.updateOne(
             {id: postId},
             {$set: {title, shortDescription, content}}
         )
         return result.matchedCount === 1
     },
-    async deletePostById(id: number) {
+    async deletePostById(id: string) {
         const result = await postsCollection.deleteOne({id})
         return result.deletedCount === 1
     }
