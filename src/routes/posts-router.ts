@@ -36,10 +36,11 @@ postsRouter.post(`/`,
 //Get post by id
 postsRouter.get(`/:postId`, async (req: Request, res: Response) => {
     const id = +req.params.postId;
-    const post = await postsService.getPostById(id);
     if (id <= 0) {
         res.send(400);
+        return
     }
+    const post = await postsService.getPostById(id);
     if (!!post) {
         res.send(post)
     } else {

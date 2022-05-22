@@ -19,6 +19,7 @@ export const postsService = {
     },
     async createNewPost(title: string, shortDescription: string, content: string, bloggerId: number) {
         const blogger = await bloggersRepository.getBloggerById(bloggerId);
+        if(!blogger) return null
         const newPost: IPost = {
             id: +Date.now(),
             title,
@@ -27,12 +28,23 @@ export const postsService = {
             bloggerId,
             bloggerName: blogger?.name
         };
-        const result = await postsRepository.createNewPost(newPost)
-        return newPost;
+        const returnedPost = await postsRepository.createNewPost(newPost)
+        return returnedPost;
     },
     async getPostById(id: number) {
         const post = await postsRepository.getPostById(id)
-        return post;
+        if(!post) return false
+        const blogger = await bloggersRepository.getBloggerById(post.bloggerId)
+        if (!blogger) return false
+        const bloggerName = blogger.name
+        return ({
+            id: post.id,
+            title: post.title,
+            shortDescription: post.shortDescription,
+            content: post.content,
+            bloggerId: post.bloggerId,
+            bloggerName
+        });
     },
     async updatePostById(postId: number, title: string, shortDescription: string, content: string) {
         let result = await postsRepository.updatePostById(postId,title, shortDescription, content)

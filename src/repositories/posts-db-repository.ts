@@ -4,15 +4,6 @@ import {postsCollection, bloggersCollection} from "./db"
 
 export const postsRepository = {
     async getPosts(page: number, pageSize: number, searchNameTerm: string, bloggerId: string | null) {
-        // const filter: any = {};
-        // if (searchNameTerm) {
-        //     filter.title = {$regex: searchNameTerm ? searchNameTerm : ''}
-        // }
-        // if (bloggerId) {
-        //     filter.title = {$regex: searchNameTerm ? searchNameTerm : ''};
-        //     filter.bloggerId = bloggerId
-        // }
-
         const filter: any = bloggerId
             ? {title: {$regex: searchNameTerm ? searchNameTerm : ''}, bloggerId: +bloggerId}
             : {title: {$regex: searchNameTerm ? searchNameTerm : ''}}
@@ -35,11 +26,12 @@ export const postsRepository = {
         }
     },
     async createNewPost(newPost: IPost) {
-        const result = await postsCollection.insertOne(newPost)
-        return newPost;
+        await postsCollection.insertOne(newPost)
+        const returnedPost = await postsCollection.findOne({id: newPost.id}, {projection: {_id:0}})
+        return returnedPost;
     },
     async getPostById(id: number) {
-        const post = await postsCollection.findOne({id: id})
+        const post = await postsCollection.findOne({id: id}, {projection: {_id: 0}})
         return post;
     },
     async updatePostById(postId: number, title: string, shortDescription: string, content: string) {
