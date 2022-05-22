@@ -11,7 +11,6 @@ import {IPost, postsService } from "../domain/posts-service";
 import { getPaginationData } from "./utils/paginationData";
 import { DataWithPaginationType } from "../types/types";
 
-
 export const postsRouter = Router({});
 
 //Get all posts

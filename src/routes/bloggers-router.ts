@@ -74,6 +74,7 @@ bloggersRouter.delete(`/:bloggerId`,
             return
         }
     })
+//Get All posts special Blogger
 bloggersRouter.get('/:bloggerId/posts', async (req: Request, res: Response) => {
     const {page, pageSize, searchNameTerm} = getPaginationData(req.query);
     const bloggerId = req.params.bloggerId
@@ -86,6 +87,7 @@ bloggersRouter.get('/:bloggerId/posts', async (req: Request, res: Response) => {
     }
 
 })
+//Create new post for special Blogger
 bloggersRouter.post(`/:bloggerId/posts`,
     checkHeadersMiddleware,
     postValidationForSpecificBloggerRules,
