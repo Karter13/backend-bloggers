@@ -26,7 +26,11 @@ export const bloggersRepository = {
     },
     async createNewBlogger(newBlogger: IBlogger): Promise<IBlogger> {
         await bloggersCollection.insertOne(newBlogger);
-        return newBlogger;
+        return {
+            id: newBlogger.id,
+            name: newBlogger.name,
+            youtubeUrl: newBlogger.youtubeUrl
+        };
     },
     async getBloggerById(id: number) {
         const blogger = await bloggersCollection.findOne({id: id}, {projection: {_id: 0}})
