@@ -81,7 +81,7 @@ bloggersRouter.get('/:bloggerId/posts', async (req: Request, res: Response) => {
     const blogger = await bloggersService.getBloggerById(+bloggerId)
     if (blogger) {
         const allPostsBlogger = await postsService.getPosts(page, pageSize, searchNameTerm, bloggerId)
-        res.send(allPostsBlogger)
+        res.status(200).send(allPostsBlogger)
     } else {
         res.send(404)
     }
