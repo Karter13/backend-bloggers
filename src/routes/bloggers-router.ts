@@ -35,8 +35,12 @@ bloggersRouter.post(`/`,
     })
 //Get blogger by id
 bloggersRouter.get(`/:bloggerId`, async (req: Request, res: Response) => {
-    const id = +req.params.bloggerId
-    const blogger = await bloggersService.getBloggerById(id)
+    const bloggerId = +req.params.bloggerId
+    if(!bloggerId) {
+        res.sendStatus(404)
+        return
+    }
+    const blogger = await bloggersService.getBloggerById(bloggerId)
     if (blogger) {
         res.send(blogger)
     } else {
@@ -50,6 +54,10 @@ bloggersRouter.put(`/:bloggerId`,
     inputValidatorMiddleware,
     async (req: Request, res: Response) => {
         const bloggerId = +req.params.bloggerId
+        if(!bloggerId) {
+            res.sendStatus(404)
+            return
+        }
         const name = req.body?.name?.trim()
         const youtubeUrl = req.body?.youtubeUrl?.trim()
 
@@ -63,9 +71,12 @@ bloggersRouter.put(`/:bloggerId`,
 bloggersRouter.delete(`/:bloggerId`,
     checkHeadersMiddleware,
     async (req: Request, res: Response) => {
-        const id = +req.params.bloggerId
-        const isDeleted = await bloggersService.deleteBlogger(id)
-
+        const bloggerId = +req.params.bloggerId
+        if(!bloggerId) {
+            res.sendStatus(404)
+            return
+        }
+        const isDeleted = await bloggersService.deleteBlogger(bloggerId)
         if (isDeleted) {
             res.sendStatus(204)
             return
@@ -78,6 +89,10 @@ bloggersRouter.delete(`/:bloggerId`,
 bloggersRouter.get('/:bloggerId/posts', async (req: Request, res: Response) => {
     const {page, pageSize, searchNameTerm} = getPaginationData(req.query);
     const bloggerId = req.params.bloggerId
+    if(!bloggerId) {
+        res.sendStatus(404)
+        return
+    }
     const blogger = await bloggersService.getBloggerById(+bloggerId)
     if (blogger) {
         const allPostsBlogger = await postsService.getPosts(page, pageSize, searchNameTerm, bloggerId)
@@ -93,10 +108,15 @@ bloggersRouter.post(`/:bloggerId/posts`,
     postValidationForSpecificBloggerRules,
     inputValidatorMiddleware,
     async (req: Request, res: Response) => {
+        const bloggerId = +req.params.bloggerId
+        if(!bloggerId) {
+            res.sendStatus(404)
+            return
+        }
         const title = req.body?.title?.trim()
         const shortDescription = req.body?.shortDescription?.trim()
         const content = req.body?.content?.trim()
-        const bloggerId = +req.params.bloggerId
+
         const blogger = await bloggersService.getBloggerById(bloggerId)
         const newPost = await postsService.createNewPost(title, shortDescription, content, bloggerId)
         if (blogger && newPost) {
