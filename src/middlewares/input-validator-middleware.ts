@@ -28,7 +28,7 @@ export const postValidationRules = [
     body('bloggerId').exists({checkFalsy: true}).isInt().withMessage(`It isn't integer.`)
         .trim().not().isEmpty().withMessage(`Field is empty.`)
         .custom(async (val, {req}) => {
-            const blogger = await bloggersRepository.getBloggerById(+val)
+            const blogger = await bloggersRepository.getBloggerById(val)
             const post = await postsRepository.getPostById(+req.params?.postId);
             if (!blogger) {
                 throw new Error('BloggerId is incorrect, there is no blogger with such ID');

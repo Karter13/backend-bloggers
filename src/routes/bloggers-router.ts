@@ -49,7 +49,7 @@ bloggersRouter.put(`/:bloggerId`,
     bloggerValidationRules,
     inputValidatorMiddleware,
     async (req: Request, res: Response) => {
-        const id = +req.params.bloggerId
+        const id = req.params.bloggerId
         const name = req.body?.name?.trim()
         const youtubeUrl = req.body?.youtubeUrl?.trim()
 
