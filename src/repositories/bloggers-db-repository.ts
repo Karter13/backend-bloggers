@@ -33,13 +33,13 @@ export const bloggersRepository = {
         };
     },
 
-    async getBloggerById(bloggerId: string) {
-        const blogger = await bloggersCollection.findOne({id: +bloggerId}, {projection: {_id: 0}})
+    async getBloggerById(bloggerId: number) {
+        const blogger = await bloggersCollection.findOne({id: bloggerId}, {projection: {_id: 0}})
         if (blogger) {
             return blogger
         } else return null
     },
-    async updateBloggerById(id: string, name: string, youtubeUrl: string) {
+    async updateBloggerById(id: number, name: string, youtubeUrl: string) {
         const result = await bloggersCollection.updateOne(
             {id: +id},
             {$set: {name, youtubeUrl}}

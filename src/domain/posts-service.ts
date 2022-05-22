@@ -5,11 +5,11 @@ import {bloggersCollection} from "../repositories/db"
 import {v4 as uuidv4} from "uuid";
 
 export interface IPost {
-    id?: string
+    id?: number
     title: string | null
     shortDescription: string | null
     content: string | null
-    bloggerId: string
+    bloggerId: number
     bloggerName?: string | null
 }
 
@@ -18,11 +18,11 @@ export const postsService = {
         const postsWithPaginationData = await postsRepository.getPosts(page, pageSize, searchNameTerm, bloggerId)
         return postsWithPaginationData
     },
-    async createNewPost(title: string, shortDescription: string, content: string, bloggerId: string) {
+    async createNewPost(title: string, shortDescription: string, content: string, bloggerId: number) {
         const blogger = await bloggersRepository.getBloggerById(bloggerId);
         if(!blogger) return null
         const newPost: IPost = {
-            id: uuidv4(),
+            id: +new Date(),
             title,
             shortDescription,
             content,
@@ -32,7 +32,7 @@ export const postsService = {
         const returnedPost = await postsRepository.createNewPost(newPost)
         return returnedPost;
     },
-    async getPostById(postId: string) {
+    async getPostById(postId: number) {
         const post = await postsRepository.getPostById(postId)
         if(!post) return false
         const blogger = await bloggersRepository.getBloggerById(post.bloggerId)
@@ -47,11 +47,11 @@ export const postsService = {
             bloggerName
         });
     },
-    async updatePostById(postId: string, title: string, shortDescription: string, content: string) {
+    async updatePostById(postId: number, title: string, shortDescription: string, content: string) {
         let result = await postsRepository.updatePostById(postId,title, shortDescription, content)
         return result
     },
-    async deletePostById(id: string) {
+    async deletePostById(id: number) {
         const result = await postsRepository.deletePostById(id)
         return result
     }

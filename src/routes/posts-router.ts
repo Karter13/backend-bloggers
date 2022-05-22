@@ -35,7 +35,7 @@ postsRouter.post(`/`,
     })
 //Get post by id
 postsRouter.get(`/:postId`, async (req: Request, res: Response) => {
-    const postId = req.params.postId;
+    const postId = +req.params.postId;
     const post = await postsService.getPostById(postId);
     if (!!post) {
         res.send(post)
@@ -50,7 +50,7 @@ postsRouter.put(`/:postId`,
     inputValidatorMiddleware,
     async (req: Request, res: Response) => {
 
-        const postId = req.params.postId
+        const postId = +req.params.postId
         const title = req.body?.title?.trim();
         const shortDescription = req.body?.shortDescription?.trim();
         const content = req.body?.content?.trim();
@@ -69,7 +69,7 @@ postsRouter.put(`/:postId`,
 postsRouter.delete(`/:postId`,
     checkHeadersMiddleware,
     async (req: Request, res: Response) => {
-        const id = req.params.postId
+        const id = +req.params.postId
         const isDeleted = await postsService.deletePostById(id)
         if (isDeleted) {
             res.sendStatus(204)

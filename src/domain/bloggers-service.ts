@@ -20,11 +20,11 @@ export const bloggersService = {
         const createdBlogger = await bloggersRepository.createNewBlogger(newBlogger);
         return createdBlogger;
     },
-    async getBloggerById(id: string) {
+    async getBloggerById(id: number) {
         const blogger = await bloggersRepository.getBloggerById(id)
         return blogger
     },
-    async updateBloggerById(id: string, name: string, youtubeUrl: string) {
+    async updateBloggerById(id: number, name: string, youtubeUrl: string) {
         const result = await bloggersRepository.updateBloggerById(id, name, youtubeUrl)
         return result
     },
