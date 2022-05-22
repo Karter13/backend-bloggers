@@ -29,8 +29,10 @@ export const bloggersRepository = {
         return newBlogger;
     },
     async getBloggerById(id: number) {
-        const blogger = await bloggersCollection.findOne({id: id})
-        return blogger
+        const blogger = await bloggersCollection.findOne({id: id}, {projection: {_id: 0}})
+        if (blogger) {
+            return blogger
+        } else return null
     },
     async updateBloggerById(id: number, name: string, youtubeUrl: string) {
         const result = await bloggersCollection.updateOne(
