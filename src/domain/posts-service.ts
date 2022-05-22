@@ -32,8 +32,8 @@ export const postsService = {
         const returnedPost = await postsRepository.createNewPost(newPost)
         return returnedPost;
     },
-    async getPostById(id: string) {
-        const post = await postsRepository.getPostById(id)
+    async getPostById(postId: string) {
+        const post = await postsRepository.getPostById(postId)
         if(!post) return false
         const blogger = await bloggersRepository.getBloggerById(post.bloggerId)
         if (!blogger) return false

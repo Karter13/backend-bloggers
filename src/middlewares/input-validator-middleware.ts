@@ -29,7 +29,7 @@ export const postValidationRules = [
         .trim().not().isEmpty().withMessage(`Field is empty.`)
         .custom(async (val, {req}) => {
             const blogger = await bloggersRepository.getBloggerById(val)
-            const post = await postsRepository.getPostById(+req.params?.postId);
+            const post = await postsRepository.getPostById(req.params?.postId);
             if (!blogger) {
                 throw new Error('BloggerId is incorrect, there is no blogger with such ID');
             }
