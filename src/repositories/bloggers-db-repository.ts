@@ -25,7 +25,7 @@ export const bloggersRepository = {
         }
     },
     async createNewBlogger(newBlogger: IBlogger): Promise<IBlogger> {
-        const result = await bloggersCollection.insertOne(newBlogger);
+        await bloggersCollection.insertOne(newBlogger);
         return newBlogger;
     },
     async getBloggerById(id: number) {
