@@ -20,7 +20,7 @@ export const bloggersService = {
         const createdBlogger = await bloggersRepository.createNewBlogger(newBlogger);
         return createdBlogger;
     },
-    async getBloggerById(id: number) {
+    async getBloggerById(id: string) {
         const blogger = await bloggersRepository.getBloggerById(id)
         return blogger
     },

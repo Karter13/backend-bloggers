@@ -35,7 +35,7 @@ bloggersRouter.post(`/`,
     })
 //Get blogger by id
 bloggersRouter.get(`/:bloggerId`, async (req: Request, res: Response) => {
-    const id = +req.params.bloggerId
+    const id = req.params.bloggerId
     const blogger = await bloggersService.getBloggerById(id)
     if (blogger) {
         res.send(blogger)
@@ -78,7 +78,7 @@ bloggersRouter.delete(`/:bloggerId`,
 bloggersRouter.get('/:bloggerId/posts', async (req: Request, res: Response) => {
     const {page, pageSize, searchNameTerm} = getPaginationData(req.query);
     const bloggerId = req.params.bloggerId
-    const blogger = await bloggersService.getBloggerById(+bloggerId)
+    const blogger = await bloggersService.getBloggerById(bloggerId)
     if (blogger) {
         const allPostsBlogger = await postsService.getPosts(page, pageSize, searchNameTerm, bloggerId)
         res.status(200).send(allPostsBlogger)
@@ -96,7 +96,7 @@ bloggersRouter.post(`/:bloggerId/posts`,
         const title = req.body?.title?.trim()
         const shortDescription = req.body?.shortDescription?.trim()
         const content = req.body?.content?.trim()
-        const bloggerId = +req.params.bloggerId
+        const bloggerId = req.params.bloggerId
         const blogger = await bloggersService.getBloggerById(bloggerId)
         const newPost = await postsService.createNewPost(title, shortDescription, content, bloggerId)
         if (blogger && newPost) {

@@ -8,7 +8,7 @@ export interface IPost {
     title: string | null
     shortDescription: string | null
     content: string | null
-    bloggerId: number
+    bloggerId: string
     bloggerName?: string | null
 }
 
@@ -17,7 +17,7 @@ export const postsService = {
         const postsWithPaginationData = await postsRepository.getPosts(page, pageSize, searchNameTerm, bloggerId)
         return postsWithPaginationData
     },
-    async createNewPost(title: string, shortDescription: string, content: string, bloggerId: number) {
+    async createNewPost(title: string, shortDescription: string, content: string, bloggerId: string) {
         const blogger = await bloggersRepository.getBloggerById(bloggerId);
         if(!blogger) return null
         const newPost: IPost = {
