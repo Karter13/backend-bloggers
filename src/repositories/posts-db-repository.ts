@@ -5,7 +5,7 @@ import {postsCollection, bloggersCollection} from "./db"
 export const postsRepository = {
     async getPosts(page: number, pageSize: number, searchNameTerm: string, bloggerId: string | null) {
         const filter: any = bloggerId
-            ? {title: {$regex: searchNameTerm ? searchNameTerm : ''}, bloggerId: bloggerId}
+            ? {title: {$regex: searchNameTerm ? searchNameTerm : ''}, bloggerId: +bloggerId}
             : {title: {$regex: searchNameTerm ? searchNameTerm : ''}}
 
         const totalCount = +(await postsCollection.countDocuments(filter));
