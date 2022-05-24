@@ -36,6 +36,7 @@ bloggersRouter.post(`/`,
 //Get blogger by id
 bloggersRouter.get(`/:bloggerId`, async (req: Request, res: Response) => {
     const headers = req.headers
+
     if(!headers) {
         res.send(404)
         return
@@ -66,6 +67,7 @@ bloggersRouter.put(`/:bloggerId`,
         const isBlogger = await bloggersService.updateBloggerById(bloggerId, name, youtubeUrl)
         if (!isBlogger) {
             res.sendStatus(404)
+            return
         }
         res.sendStatus(204)
     })

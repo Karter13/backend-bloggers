@@ -25,7 +25,7 @@ postsRouter.post(`/`,
     postValidationRules,
     inputValidatorMiddleware,
     async (req: Request, res: Response) => {
-        const bloggerId = req.body.bloggerId
+        const bloggerId = +req.body.bloggerId
 
         const title = req.body?.title?.trim()
         const shortDescription = req.body?.shortDescription?.trim()
