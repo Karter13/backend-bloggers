@@ -25,10 +25,11 @@ postsRouter.post(`/`,
     postValidationRules,
     inputValidatorMiddleware,
     async (req: Request, res: Response) => {
+        const bloggerId = req.body.bloggerId
+
         const title = req.body?.title?.trim()
         const shortDescription = req.body?.shortDescription?.trim()
         const content = req.body?.content?.trim()
-        const bloggerId = req.body.bloggerId
 
         const newPost = await postsService.createNewPost(title, shortDescription, content, bloggerId)
         res.status(201).send(newPost)
@@ -56,7 +57,6 @@ postsRouter.put(`/:postId`,
         const content = req.body?.content?.trim();
         const bloggerId = +req.body.bloggerId;
 
-        const post = postsService.getPostById(postId);//?????????????????
         const isPost = await postsService.updatePostById(postId, title, shortDescription, content)
 
         if (!isPost) {

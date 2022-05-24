@@ -34,7 +34,7 @@ export const bloggersRepository = {
     },
 
     async getBloggerById(bloggerId: number) {
-        const blogger = await bloggersCollection.findOne({id: bloggerId}, {projection: {_id: 0}})
+        const blogger = await bloggersCollection.findOne({id: +bloggerId}, {projection: {_id: 0}})
         if (blogger) {
             return blogger
         } else return null
