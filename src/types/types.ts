@@ -11,3 +11,34 @@ export type QueryType = {
     pageSize: number,
     searchNameTerm: string
 }
+
+export interface IBlogger {
+    id: number
+    name?: string | null
+    youtubeUrl: string
+}
+
+export interface IUser {
+    id: string
+    login: string
+    passwordHash?: string
+}
+
+export interface IPost {
+    id?: number
+    title: string | null
+    shortDescription: string | null
+    content: string | null
+    bloggerId: number
+    bloggerName?: string | null
+}
+
+export interface IComment {
+    id: string,
+    content: string,
+    postId: string,
+    userId: string,
+    userLogin: string,
+    addedAt: Date
+}
+

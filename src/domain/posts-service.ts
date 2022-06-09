@@ -1,17 +1,10 @@
-import {IBlogger} from "./bloggers-service";
 import {postsRepository} from "../repositories/posts-db-repository"
 import {bloggersRepository} from "../repositories/bloggers-db-repository"
 import {bloggersCollection} from "../repositories/db"
 import {v4 as uuidv4} from "uuid";
+import { IPost } from "../types/types";
 
-export interface IPost {
-    id?: number
-    title: string | null
-    shortDescription: string | null
-    content: string | null
-    bloggerId: number
-    bloggerName?: string | null
-}
+
 
 export const postsService = {
     async getPosts(page: number, pageSize: number, searchNameTerm: string, bloggerId: string | null) {

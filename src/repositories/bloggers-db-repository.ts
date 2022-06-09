@@ -1,5 +1,4 @@
-import { IBlogger } from "../domain/bloggers-service";
-import { DataWithPaginationType } from "../types/types";
+import { DataWithPaginationType, IBlogger } from "../types/types";
 import { bloggersCollection, postsCollection } from "./db";
 
 export const bloggersRepository = {
@@ -51,14 +50,6 @@ export const bloggersRepository = {
         return result.matchedCount === 1
     },
     async deleteBlogger(id: number) {
-        // const blogger = bloggers.find(b => b.id === id)
-        // const newBloggers = bloggers.filter(b => b.id !== id)
-        // if(bloggers.length !== 0 && newBloggers.length < bloggers.length) {
-        //     bloggers = newBloggers
-        //     return true
-        // } else {
-        //     return false
-        // }
         const result = await bloggersCollection.deleteOne({id})
         return result.deletedCount === 1
     }

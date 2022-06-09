@@ -49,6 +49,8 @@ export const postValidationForSpecificBloggerRules = [
         .isLength({min: 1, max: 1000}).withMessage(`Field has more than 1000 characters`)
 ]
 
+
+
 export const inputValidatorMiddleware = (req: Request, res: Response, next: NextFunction) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {

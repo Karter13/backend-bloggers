@@ -6,10 +6,10 @@ import {
     inputValidatorMiddleware,
     postValidationRules
 } from "../middlewares/input-validator-middleware";
-import {bloggers, bloggersRepository} from "../repositories/bloggers-repository";
-import {IPost, postsService } from "../domain/posts-service";
+import { postsService } from "../domain/posts-service";
 import { getPaginationData } from "./utils/paginationData";
-import { DataWithPaginationType } from "../types/types";
+import { DataWithPaginationType, IComment, IPost } from "../types/types";
+import { commentsService } from "../domain/comments-service";
 
 export const postsRouter = Router({});
 
@@ -77,3 +77,33 @@ postsRouter.delete(`/:postId`,
             res.sendStatus(404)
         }
     })
+
+//Return comments for specified post
+postsRouter.get('/:postId/comments', async (req: Request, res:Response) => {
+    const paginData = getPaginationData(req.query)
+    const postId = req.params.postId;
+    const comments: DataWithPaginationType<IComment[]> = await commentsService.getComments(paginData, postId)
+    const post = await postsService.getPostById(+postId)
+    if(!post) {
+        res.sendStatus(404)
+    }
+    res.status(200).send(comments)
+    
+})
+
+//Create comments
+postsRouter.post('/:postId/comments', 
+    async (req:Request, res: Response) => {
+    const postId = req.params.postId;
+    const userId = '123456789'
+    const userLogin = '123456789'
+    const content = req.body.content;
+    const post = await postsService.getPostById(+postId);
+    if(!post) {
+        res.sendStatus(404)
+        return
+    }
+    const comments: IComment | null = await commentsService.creteComment(content, postId, userLogin, userId!)
+    res.status(201).send(comments)
+
+})

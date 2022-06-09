@@ -1,6 +1,6 @@
 import express, {Router, Request, Response} from "express"
 import {} from "..";
-import {bloggersService, IBlogger} from "../domain/bloggers-service";
+import {bloggersService} from "../domain/bloggers-service";
 import {postsService} from "../domain/posts-service";
 import {checkHeadersMiddleware} from "../middlewares/auth-middleware";
 import {
@@ -10,7 +10,7 @@ import {
     postValidationForSpecificBloggerRules,
     postValidationRules
 } from "../middlewares/input-validator-middleware";
-import {DataWithPaginationType} from "../types/types";
+import {DataWithPaginationType, IBlogger} from "../types/types";
 import {getPaginationData} from "./utils/paginationData";
 
 export const bloggersRouter = Router({})

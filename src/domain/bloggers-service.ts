@@ -1,10 +1,5 @@
 import {bloggersRepository} from "../repositories/bloggers-db-repository";
-
-export interface IBlogger {
-    id: number
-    name?: string | null
-    youtubeUrl: string
-}
+import { IBlogger } from "../types/types";
 
 export const bloggersService = {
     async getBloggers(page: number, pageSize: number, searchNameTerm: string) {

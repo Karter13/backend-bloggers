@@ -1,5 +1,4 @@
-import {IPost} from "../domain/posts-service";
-import {bloggers, IBlogger} from "./bloggers-repository";
+import { IPost } from "../types/types";
 import {postsCollection, bloggersCollection} from "./db"
 
 export const postsRepository = {
