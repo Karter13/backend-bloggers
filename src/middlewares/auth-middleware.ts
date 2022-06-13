@@ -6,8 +6,10 @@ export const checkHeadersMiddleware = (req: Request, res: Response, next: NextFu
 
     if(!req.headers || !req.headers.authorization ) {
         res.sendStatus(401)
+        return;
     } else if(req.headers.authorization !== exceptedAuthorizationValue) {
         res.sendStatus(401)
+        return;
     } else {
         next()
     }

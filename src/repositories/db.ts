@@ -2,8 +2,8 @@ import {MongoClient} from 'mongodb'
 // require('dotenv').config()
 import {IBlogger, IComment, IPost, IUser } from '../types/types';
 
-const mongoUri = process.env.mongoURI || "mongodb://0.0.0.0:27017";
-// const mongoUri = process.env.mongoURI || `mongodb+srv://maikl:14882301@cluster0.xh3ft.mongodb.net/bloggersDB`;
+// const mongoUri = process.env.mongoURI || "mongodb://0.0.0.0:27017";
+const mongoUri = process.env.mongoURI || `mongodb+srv://maikl:14882301@cluster0.xh3ft.mongodb.net/bloggersDB`;
 
 const mongoDBClient = new MongoClient(mongoUri);
 

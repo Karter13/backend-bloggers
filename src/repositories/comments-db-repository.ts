@@ -3,7 +3,10 @@ import {commentsCollection} from "./db";
 
 export const commentsRepository = {
     async getComments(paginData: QueryType, postId: string | null): Promise<DataWithPaginationType<IComment[]>> {
-        const filter = {}
+
+        let filter = postId
+            ?{content : {$regex : paginData.searchNameTerm ? paginData.searchNameTerm : ""}, postId }
+            :{content : {$regex : paginData.searchNameTerm ? paginData.searchNameTerm : ""}}
         const comments = await commentsCollection
             .find(filter)
             .project<IComment>({_id: 0, postId: 0})
@@ -30,6 +33,17 @@ export const commentsRepository = {
             .findOne<IComment>({id: commentId}, {projection: {_id: 0, postId: 0}})
         if(!comment) return null
         return comment
+    },
+    async deleteCommentById(commentId: string): Promise<boolean> {
+        const result = await commentsCollection.deleteOne({id: commentId})
+        return result.deletedCount === 1
+    },
+    async updateCommentById(commentId: string, content: string): Promise<boolean> {
+        const result = await commentsCollection.updateOne(
+            {id: commentId},
+            {$set: {content}}
+            )
+        return result.matchedCount === 1
     }
 
 }

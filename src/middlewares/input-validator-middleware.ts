@@ -1,12 +1,7 @@
 import {Request, Response, NextFunction} from "express";
-import {body, validationResult, param} from "express-validator";
+import {body, validationResult, param, check} from "express-validator";
 import {bloggersRepository} from "../repositories/bloggers-db-repository";
 import {postsRepository} from "../repositories/posts-db-repository";
-
-export interface IErrorMessage {
-    message: string
-    field: string
-}
 
 export const urlValidator = /^https:\/\/([a-zA-Z0-9_-]+\.)+[a-zA-Z0-9_-]+$/;
 
@@ -47,6 +42,28 @@ export const postValidationForSpecificBloggerRules = [
         .isLength({min: 1, max: 100}).withMessage(`Field has more than 100 characters`),
     body('content').exists({checkFalsy: true}).isString().trim().not().isEmpty().withMessage(`Field is empty.`)
         .isLength({min: 1, max: 1000}).withMessage(`Field has more than 1000 characters`)
+]
+
+export const loginValidationRules = [
+    body('login').exists({checkFalsy: true}).isString().trim().not()
+        .isEmpty().withMessage(`Field is empty.`).isLength({min: 3, max: 10}).withMessage('Login length should be:  min-3, max-10'),
+    body('password').exists({checkFalsy: true}).isString().trim().not()
+        .isEmpty().withMessage(`Field is empty.`).isLength({min: 6, max: 20}).withMessage('Login length should be:  min-6, max-20'),
+]
+
+export const paginationRules = [
+    check('page').optional({checkFalsy: true,},)
+        .isInt({min: 1}).withMessage('page should be numeric value'),
+    check('pageSize').optional({checkFalsy: true})
+        .isInt({min: 1}).withMessage('pageSize should be numeric value'),
+    check('searchNameTerm').optional({checkFalsy: true})
+        .isString().withMessage('searchNameTerm should be string'),
+]
+
+export const commentValidationRules = [
+    body('content').exists({checkFalsy: true}).isString().trim().not()
+        .isEmpty().withMessage(`Field is empty.`)
+        .isLength({min: 20, max: 300}).withMessage(`Password length should be min-20 max-300`)
 ]
 
 

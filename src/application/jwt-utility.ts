@@ -15,7 +15,7 @@ export const jwtUtility = {
             if(!result.userId) {
                 return null
             }
-            return new result.userId
+            return result.userId
 
         }catch (error) {
             return null

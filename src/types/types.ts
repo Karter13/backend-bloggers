@@ -42,3 +42,8 @@ export interface IComment {
     addedAt: Date
 }
 
+export interface IErrorMessage {
+    message: string
+    field: string
+}
+

@@ -2,14 +2,16 @@ import express, {Router, Request, Response} from "express"
 import {} from "..";
 import {checkHeadersMiddleware} from "../middlewares/auth-middleware";
 import {
-    IErrorMessage,
+    commentValidationRules,
     inputValidatorMiddleware,
+    paginationRules,
     postValidationRules
 } from "../middlewares/input-validator-middleware";
 import { postsService } from "../domain/posts-service";
 import { getPaginationData } from "./utils/paginationData";
 import { DataWithPaginationType, IComment, IPost } from "../types/types";
 import { commentsService } from "../domain/comments-service";
+import { authTokenMiddleware } from "../middlewares/auth-token-middleware";
 
 export const postsRouter = Router({});
 
@@ -79,7 +81,10 @@ postsRouter.delete(`/:postId`,
     })
 
 //Return comments for specified post
-postsRouter.get('/:postId/comments', async (req: Request, res:Response) => {
+postsRouter.get('/:postId/comments',
+    paginationRules,
+    inputValidatorMiddleware,
+    async (req: Request, res:Response) => {
     const paginData = getPaginationData(req.query)
     const postId = req.params.postId;
     const comments: DataWithPaginationType<IComment[]> = await commentsService.getComments(paginData, postId)
@@ -92,11 +97,14 @@ postsRouter.get('/:postId/comments', async (req: Request, res:Response) => {
 })
 
 //Create comments
-postsRouter.post('/:postId/comments', 
+postsRouter.post('/:postId/comments',
+    authTokenMiddleware,
+    commentValidationRules,
+    inputValidatorMiddleware,
     async (req:Request, res: Response) => {
     const postId = req.params.postId;
-    const userId = '123456789'
-    const userLogin = '123456789'
+    const userId = req.user!.id
+    const userLogin = req.user.login
     const content = req.body.content;
     const post = await postsService.getPostById(+postId);
     if(!post) {

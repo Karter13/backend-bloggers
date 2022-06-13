@@ -5,7 +5,6 @@ import {postsService} from "../domain/posts-service";
 import {checkHeadersMiddleware} from "../middlewares/auth-middleware";
 import {
     bloggerValidationRules,
-    IErrorMessage,
     inputValidatorMiddleware,
     postValidationForSpecificBloggerRules,
     postValidationRules
