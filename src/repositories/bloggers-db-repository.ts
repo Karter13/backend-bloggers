@@ -32,15 +32,15 @@ export const bloggersRepository = {
         };
     },
 
-    async getBloggerById(bloggerId: number) {
-        const blogger = await bloggersCollection.findOne({id: +bloggerId}, {projection: {_id: 0}})
+    async getBloggerById(bloggerId: string) {
+        const blogger = await bloggersCollection.findOne({id: bloggerId}, {projection: {_id: 0}})
         if (blogger) {
             return blogger
         } else return null
     },
-    async updateBloggerById(id: number, name: string, youtubeUrl: string) {
+    async updateBloggerById(id: string, name: string, youtubeUrl: string) {
         const result = await bloggersCollection.updateOne(
-            {id: +id},
+            {id: id},
             {$set: {name, youtubeUrl}}
         )
         await postsCollection.updateMany(
@@ -49,7 +49,7 @@ export const bloggersRepository = {
         )
         return result.matchedCount === 1
     },
-    async deleteBlogger(id: number) {
+    async deleteBlogger(id: string) {
         const result = await bloggersCollection.deleteOne({id})
         return result.deletedCount === 1
     }

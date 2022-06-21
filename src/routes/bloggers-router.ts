@@ -40,7 +40,7 @@ bloggersRouter.get(`/:bloggerId`, async (req: Request, res: Response) => {
         res.send(404)
         return
     }
-    const bloggerId = +req.params.bloggerId
+    const bloggerId = req.params.bloggerId
     const blogger = await bloggersService.getBloggerById(bloggerId)
     if (blogger) {
         res.send(blogger)
@@ -59,7 +59,7 @@ bloggersRouter.put(`/:bloggerId`,
             res.send(404)
             return
         }
-        const bloggerId = +req.params.bloggerId
+        const bloggerId = req.params.bloggerId
         const name = req.body?.name?.trim()
         const youtubeUrl = req.body?.youtubeUrl?.trim()
 
@@ -79,7 +79,7 @@ bloggersRouter.delete(`/:bloggerId`,
             res.send(404)
             return
         }
-        const bloggerId = +req.params.bloggerId
+        const bloggerId = req.params.bloggerId
         const isDeleted = await bloggersService.deleteBlogger(bloggerId)
         if (isDeleted) {
             res.sendStatus(204)
@@ -97,7 +97,7 @@ bloggersRouter.get('/:bloggerId/posts', async (req: Request, res: Response) => {
         res.sendStatus(404)
         return
     }
-    const blogger = await bloggersService.getBloggerById(+bloggerId)
+    const blogger = await bloggersService.getBloggerById(bloggerId)
     if (blogger) {
         const allPostsBlogger = await postsService.getPosts(page, pageSize, searchNameTerm, bloggerId)
         res.status(200).send(allPostsBlogger)
@@ -112,7 +112,7 @@ bloggersRouter.post(`/:bloggerId/posts`,
     postValidationForSpecificBloggerRules,
     inputValidatorMiddleware,
     async (req: Request, res: Response) => {
-        const bloggerId = +req.params.bloggerId
+        const bloggerId = req.params.bloggerId
         if(!bloggerId) {
             res.sendStatus(404)
             return

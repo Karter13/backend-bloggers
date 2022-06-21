@@ -13,7 +13,7 @@ export type QueryType = {
 }
 
 export interface IBlogger {
-    id: number
+    id: string
     name?: string | null
     youtubeUrl: string
 }
@@ -25,11 +25,11 @@ export interface IUser {
 }
 
 export interface IPost {
-    id?: number
+    id?: string
     title: string | null
     shortDescription: string | null
     content: string | null
-    bloggerId: number
+    bloggerId: string
     bloggerName?: string | null
 }
 

@@ -27,7 +27,7 @@ postsRouter.post(`/`,
     postValidationRules,
     inputValidatorMiddleware,
     async (req: Request, res: Response) => {
-        const bloggerId = +req.body.bloggerId
+        const bloggerId = req.body.bloggerId
 
         const title = req.body?.title?.trim()
         const shortDescription = req.body?.shortDescription?.trim()
@@ -38,7 +38,7 @@ postsRouter.post(`/`,
     })
 //Get post by id
 postsRouter.get(`/:postId`, async (req: Request, res: Response) => {
-    const postId = +req.params.postId;
+    const postId = req.params.postId;
     const post = await postsService.getPostById(postId);
     if (!!post) {
         res.send(post)
@@ -53,11 +53,11 @@ postsRouter.put(`/:postId`,
     inputValidatorMiddleware,
     async (req: Request, res: Response) => {
 
-        const postId = +req.params.postId
+        const postId = req.params.postId
         const title = req.body?.title?.trim();
         const shortDescription = req.body?.shortDescription?.trim();
         const content = req.body?.content?.trim();
-        const bloggerId = +req.body.bloggerId;
+        const bloggerId = req.body.bloggerId;
 
         const isPost = await postsService.updatePostById(postId, title, shortDescription, content)
 
@@ -71,7 +71,7 @@ postsRouter.put(`/:postId`,
 postsRouter.delete(`/:postId`,
     checkHeadersMiddleware,
     async (req: Request, res: Response) => {
-        const id = +req.params.postId
+        const id = req.params.postId
         const isDeleted = await postsService.deletePostById(id)
         if (isDeleted) {
             res.sendStatus(204)
@@ -88,7 +88,7 @@ postsRouter.get('/:postId/comments',
     const paginData = getPaginationData(req.query)
     const postId = req.params.postId;
     const comments: DataWithPaginationType<IComment[]> = await commentsService.getComments(paginData, postId)
-    const post = await postsService.getPostById(+postId)
+    const post = await postsService.getPostById(postId)
     if(!post) {
         res.sendStatus(404)
     }
@@ -106,7 +106,7 @@ postsRouter.post('/:postId/comments',
     const userId = req.user!.id
     const userLogin = req.user.login
     const content = req.body.content;
-    const post = await postsService.getPostById(+postId);
+    const post = await postsService.getPostById(postId);
     if(!post) {
         res.sendStatus(404)
         return

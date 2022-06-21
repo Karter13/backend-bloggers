@@ -1,5 +1,6 @@
 import {bloggersRepository} from "../repositories/bloggers-db-repository";
 import { IBlogger } from "../types/types";
+import {v4 as uuidv4} from "uuid";
 
 export const bloggersService = {
     async getBloggers(page: number, pageSize: number, searchNameTerm: string) {
@@ -8,22 +9,22 @@ export const bloggersService = {
     },
     async createNewBlogger(name: string, youtubeUrl: string): Promise<IBlogger> {
         const newBlogger = {
-            id: +(Date.now()),
+            id: uuidv4(),
             name,
             youtubeUrl
         };
         const createdBlogger = await bloggersRepository.createNewBlogger(newBlogger);
         return createdBlogger;
     },
-    async getBloggerById(id: number) {
+    async getBloggerById(id: string) {
         const blogger = await bloggersRepository.getBloggerById(id)
         return blogger
     },
-    async updateBloggerById(id: number, name: string, youtubeUrl: string) {
+    async updateBloggerById(id: string, name: string, youtubeUrl: string) {
         const result = await bloggersRepository.updateBloggerById(id, name, youtubeUrl)
         return result
     },
-    async deleteBlogger(id: number) {
+    async deleteBlogger(id: string) {
         const result = await bloggersRepository.deleteBlogger(id)
         return result
     }
