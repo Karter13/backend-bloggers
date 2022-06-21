@@ -6,7 +6,7 @@ export const usersRepository = {
         const filter = {};
         const allUsers = await usersCollection
             .find()
-            .project<IUser>({_id: 0})
+            .project<IUser>({_id: 0, passwordHash: 0})
             .skip((page - 1) * pageSize)
             .limit(pageSize)
             .toArray()
@@ -24,7 +24,7 @@ export const usersRepository = {
         await usersCollection.insertOne(newUser);
         const createdUser: IUser | null = await usersCollection.findOne(
             {id: newUser.id},
-            {projection: {_id:0}}
+            {projection: {_id:0, passwordHash: 0}}
             )
         return createdUser ? createdUser : null
     },
