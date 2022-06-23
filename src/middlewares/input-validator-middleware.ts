@@ -73,8 +73,7 @@ export const inputValidatorMiddleware = (req: Request, res: Response, next: Next
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({
-            errorsMessages: errors.array({onlyFirstError: true}).map(e => ({message: e.msg, field: e.param})),
-            resultCode: 1
+            errorsMessages: errors.array({onlyFirstError: true}).map(e => ({message: e.msg, field: e.param}))
         });
         return
     }
