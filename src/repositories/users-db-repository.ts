@@ -1,3 +1,4 @@
+import { Nullable } from "../types/nullableType";
 import { IUser } from "../types/types";
 import {usersCollection} from "./db"
 
@@ -20,7 +21,7 @@ export const usersRepository = {
             items: allUsers
         })
     },
-    async createUser(newUser: IUser): Promise<IUser | null> {
+    async createUser(newUser: IUser): Promise<Nullable<IUser>> {
         await usersCollection.insertOne(newUser);
         const createdUser: IUser | null = await usersCollection.findOne(
             {id: newUser.id},
@@ -32,11 +33,11 @@ export const usersRepository = {
         const result = await usersCollection.deleteOne({id})
         return result.deletedCount === 1
     },
-    async findUserByLogin(login: string): Promise<IUser | null> {
+    async findUserByLogin(login: string): Promise<Nullable<IUser>> {
         const user = await usersCollection.findOne({login})
         return user
     },
-    async findUserById(id: string): Promise<IUser | null> {
+    async findUserById(id: string): Promise<Nullable<IUser>> {
         const user = await usersCollection.findOne({id})
         return user
     }

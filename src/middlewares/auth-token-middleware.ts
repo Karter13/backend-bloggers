@@ -2,6 +2,7 @@ import {Request, Response, NextFunction} from 'express'
 import { ObjectId } from 'mongodb';
 import {jwtUtility} from '../application/jwt-utility';
 import {usersRepository} from '../repositories/users-db-repository';
+import { Nullable } from '../types/nullableType';
 import { IUser } from '../types/types';
 
 export const authTokenMiddleware = async (req: Request, res: Response, next: NextFunction) => {
@@ -18,7 +19,7 @@ export const authTokenMiddleware = async (req: Request, res: Response, next: Nex
     }
     try {
         const userId: any = await jwtUtility.extractUserIdFromToken(token);
-        const user: IUser | null = await usersRepository.findUserById(userId);
+        const user: Nullable<IUser> = await usersRepository.findUserById(userId);
         if(!user) {
             res.status(404).send("user from jwt data not found")
             return
