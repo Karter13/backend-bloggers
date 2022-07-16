@@ -2,13 +2,14 @@ import {usersRepository} from "../repositories/users-db-repository"
 import {v4 as uuidv4} from "uuid";
 import { authService } from "./auth-service";
 import { IUser } from "../types/types";
+import { Nullable } from "../types/nullableType";
 
 export const usersService = {
     async getUsers(page: number, pageSize: number) {
         const users = await usersRepository.getUsers(page, pageSize)
         return users
     },
-    async createUser(login: string, password: string): Promise<IUser | null> {
+    async createUser(login: string, password: string): Promise<Nullable<IUser>> {
         const passwordHash: string = await authService._generateHash(password)
         const newUser: IUser = { 
             id: uuidv4(),

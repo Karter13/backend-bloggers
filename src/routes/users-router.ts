@@ -2,6 +2,7 @@ import express, {Router, Request, Response} from "express";
 import {usersService} from "../domain/users-service";
 import {checkHeadersMiddleware} from "../middlewares/auth-middleware";
 import {inputValidatorMiddleware, loginValidationRules, paginationRules} from "../middlewares/input-validator-middleware";
+import { Nullable } from "../types/nullableType";
 import {DataWithPaginationType, IUser} from "../types/types";
 import {getPaginationData} from "./utils/paginationData";
 
@@ -23,7 +24,7 @@ usersRouter.post('/',
     loginValidationRules,
     inputValidatorMiddleware,
     async (req: Request, res: Response) => {
-        const createdUser: IUser | null = await usersService.createUser(
+        const createdUser: Nullable<IUser> = await usersService.createUser(
             req.body.login,
             req.body.password
         );
